@@ -1,3 +1,16 @@
 - hosts: all
-  roles:
-    - role: ansible-galaxy role install geerlingguy.pip
+
+  tasks:
+    - name: cp env
+      template:
+        src: ./template/.env.redmine.j2
+        dest: '{{ ansible_env.HOME }}/.env.redmine'
+        mode: '660'
+      tags: deploy
+    - name: up redmine
+      community.docker.docker_container:
+        name: redmine
+        image: redmine
+        ports: [3000:3000]
+        env_file: '{{ ansible_env.HOME }}/.env.redmine'
+      tags: deploy
