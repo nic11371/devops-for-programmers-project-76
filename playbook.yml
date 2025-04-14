@@ -1,4 +1,6 @@
+---
 - hosts: all
+  become: true
 
   tasks:
     - name: cp env
